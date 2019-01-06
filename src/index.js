@@ -10,7 +10,7 @@ const client = new ApolloClient({
     request: operation => {
         operation.setContext({
             headers: {
-                authorization: `Bearer your-personal-access-token`
+                authorization: `Bearer 16b21ab46ea0a59283fd9075b61f609fca9294eb`
             },
         });
     }

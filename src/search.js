@@ -40,7 +40,7 @@ class Search extends Component {
                     console.log(this.state.over)
                     return prev
                 }
-                return Object.assign(prev, fetchMoreResult);
+                return { ...prev, ...fetchMoreResult };
             }
         })
     }

@@ -13,8 +13,7 @@ class Myrepositories extends Component {
                 if (!fetchMoreResult) {
                     return prev
                 }
-                return Object
-                    .assign(prev, fetchMoreResult);
+                return { ...prev, ...fetchMoreResult }
             }
         })
     }
