@@ -1,9 +1,6 @@
-# React apollo client using Github graphql api
+# React hooks with apollo client
 
 ![getting started with react apollo graphql client](https://i.imgur.com/4xDJgWg.gif)
-
-![gihtub search](https://i.imgur.com/J2Wlkhe.gif)
-
 
 
 ### Requirements
@@ -15,5 +12,4 @@
 
 Runs the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
 
