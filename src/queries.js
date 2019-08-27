@@ -2,9 +2,9 @@ import { gql } from 'apollo-boost'
 
 const reposQuery = gql`
 
-query Myrepositories($first:Int!){
+query Myrepositories{
      viewer {
-    repositories(first: $first) {
+    repositories(first:5) {
       edges {
         node {
           id
@@ -27,4 +27,6 @@ const userQuery = gql` {
    }
 }`
 
-export { reposQuery, userQuery }
+
+
+export { reposQuery, userQuery };

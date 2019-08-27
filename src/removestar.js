@@ -1,51 +1,32 @@
-import React, { Component } from 'react';
-import { Mutation } from 'react-apollo'
-import { gql } from 'apollo-boost';
+import React from 'react';
+import { useMutation } from '@apollo/react-hooks';
+import { Remove_Star } from './mutation';
 
 
-const removeStarquery = gql`
-mutation RemoveStar($repoid:ID!){
-   removeStar(input:{starrableId:$repoid}){
-    starrable{
-      stargazers{
-        totalCount
-      }
-      viewerHasStarred
-    }
-  }
-}`
 
 
-class RemoveStar extends Component {
+function RemoveStar(props) {
 
-    render() {
-        return (
+    const [removeStar, { loading, error }] = useMutation(Remove_Star)
 
-            <Mutation mutation={removeStarquery} >
-                {(removeStar, { data, loading, error }) => {
-                    return (
-                        <div>
-                            <button onClick={() => {
-                                removeStar({
-                                    variables:
-                                        { repoid: this.props.id }
-                                }).then(res => {
-                                    this.props.refetch();
-                                })
-                            }}
-                            > remove star</button>
-                            {loading && <p>processing...</p>}
-                            {error && <p>{error.message}</p>}
+    return (
 
-                        </div>
-                    )
+        <div>
+            <button onClick={() => {
+                removeStar({
+                    variables:
+                        { repoid: props.id }
+                }).then(res => {
+                    props.refetch();
+                })
+            }}
+            > remove star</button>
+            {loading && <p>processing...</p>}
+            {error && <p>{error.message}</p>}
 
-                }}
-
-            </Mutation>
-        )
-    }
-
+        </div>
+    )
 }
+
 
 export default RemoveStar;

@@ -1,45 +1,37 @@
-import React, { Component } from 'react';
-import { Query } from 'react-apollo'
-import Displayrepos from './display-repos'
+import React from 'react';
 import { reposQuery } from './queries'
+import { useQuery } from '@apollo/react-hooks';
+import AddStar from './addstar'
+import RemoveStar from './removestar'
 
+function Myrepositories() {
 
-class Myrepositories extends Component {
+    const { loading, error, data, refetch } = useQuery(reposQuery)
 
-    handleMore = (data, fetchMore, current) => {
-        fetchMore({
-            variables: { first: current + 10 },
-            updateQuery: (prev, { fetchMoreResult }) => {
-                if (!fetchMoreResult) {
-                    return prev
-                }
-                return { ...prev, ...fetchMoreResult }
-            }
-        })
-    }
+    if (loading) return <p>loading...</p>
+    if (error) return <p>{error.message}</p>;
+    let currentLength = data.viewer.repositories.edges.length;
 
-    render() {
-        return (
-            <Query query={reposQuery} variables={{ first: 10 }}>
-                {({ data, loading, error, fetchMore, refetch }) => {
+    return (
 
-                    if (loading) return <p>loading...</p>
-                    if (error) return <p>{error.message}</p>;
-
-                    let current = data
-                        .viewer.repositories
-                        .edges.length;
-
-                    return <Displayrepos current={current}
-                        refetch={refetch}
-                        data={data}
-                        handleMore={() => this.handleMore(data, fetchMore, current)}
-                    />
-                }}
-            </Query>
-        );
-    }
-
+        <div className="repos">
+            <h2>First {currentLength} repositories</h2>
+            {data.viewer.repositories
+                .edges.map(({ node }) =>
+                    <ul className="list" key={node.id}>
+                        <li>
+                            {node.name}
+                            {node.viewerHasStarred ?
+                                <RemoveStar id={node.id} refetch={refetch} /> :
+                                <AddStar id={node.id} refetch={refetch} />
+                            }
+                        </li>
+                        <li>stars {node.stargazers.totalCount}</li>
+                    </ul>
+                )}
+        </div>
+    );
 }
+
 
 export default Myrepositories;

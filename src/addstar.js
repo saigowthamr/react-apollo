@@ -1,53 +1,31 @@
-import React, { Component } from 'react';
-import { Mutation } from 'react-apollo'
-import { gql } from 'apollo-boost';
+import React from 'react';
+import { useMutation } from '@apollo/react-hooks';
+import { ADD_STAR } from './mutation';
 
 
-const addStarquery = gql`
-mutation AddStar($repoid:ID!){
-   addStar(input:{starrableId:$repoid}){
-    starrable{
-      stargazers{
-        totalCount
-      }
-      viewerHasStarred
-    }
-  }
-}`
 
+function AddStar(props) {
 
-class AddStar extends Component {
+    const [addStar, { loading, error }] = useMutation(ADD_STAR)
 
-
-  render() {
     return (
 
-      <Mutation mutation={addStarquery} >
+        <div>
+            <button onClick={() => {
+                addStar({
+                    variables:
+                        { repoid: props.id }
+                }).then(res => {
+                    props.refetch();
+                })
+            }}
+            > Add star</button>
+            {loading && <p>processing...</p>}
+            {error && <p>{error.message}</p>}
 
-        {(addStar, { data, loading, error }) => {
-
-          return (
-            <div>
-              <button onClick={() => {
-                addStar({ variables: { repoid: this.props.id } })
-                  .then(res => {
-                    this.props.refetch()
-                  })
-
-              }}
-              > Addstar</button>
-
-              {loading && <p>loading...</p>}
-              {error && <p>{error.message}</p>}
-            </div>
-          )
-
-        }}
-
-      </Mutation>
+        </div>
     )
-  }
-
 }
+
 
 export default AddStar;

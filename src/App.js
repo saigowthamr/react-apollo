@@ -1,32 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
-import { Query } from 'react-apollo'
-import Myrepositories from './my-repositories.js'
-import { userQuery } from './queries'
-import Search from './search'
+import { useQuery } from '@apollo/react-hooks'
+import Myrepositories from './my-repositories'
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <Query query={userQuery}>
-          {(result) => {
-            if (result.loading) return <p>loading...</p>
-            if (result.error) return <p>{`${result.error.message}`}</p>;
-            return (
-              <div>
-                <h1>Name: {result.data.viewer.name}</h1>
-                <p>Email: {result.data.viewer.email}</p>
-              </div>
-            )
-
-          }}
-        </Query>
-        <Myrepositories />
-        <Search />
+function App() {
+  const { loading, error, data } = useQuery(useQuery);
+  if (loading) return <p>loading...</p>
+  if (error) return <p>{error.message}</p>;
+  return (
+    <div className="App">
+      <div>
+        <h1>Name: {data.viewer.name}</h1>
+        <p>Email: {data.viewer.email}</p>
       </div>
-    );
-  }
+      <Myrepositories />
+    </div>
+  );
 }
 
 export default App;
